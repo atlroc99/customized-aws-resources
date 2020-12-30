@@ -1,4 +1,4 @@
-from aws_cdk import core
+from aws_cdk import (core, aws_s3 as _s3)
 
 
 class CustomizeResourcesStack(core.Stack):
