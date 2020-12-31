@@ -1,3 +1,5 @@
 -e .
 aws_cdk.core
-aws_cdk.aws_s3
+aws_cdk.aws_ssm
+aws_cdk.aws_secretsmanager
+aws_cdk.aws_iam
