@@ -41,7 +41,9 @@ class IAMUserAndGroup(core.Stack):
                            password_reset_required=True,
                            user_name="cdk_user01")
 
+        print(f"https://{core.Aws.ACCOUNT_ID}.signin.aws.amazon.com/console")
         user_1_cfn_output = core.CfnOutput(self,
                                            "user1CfnOutout",
                                            description="user01 login url",
-                                           value=f"https://{core.Aws.ACCOUNT_ID}.signin.aws.com/console")
+                                           value = f"https://{core.Aws.ACCOUNT_ID}.signin.aws.amazon.com/console")
+                                          #value=f"https://{core.Aws.ACCOUNT_ID}.signin.aws.com/console")
