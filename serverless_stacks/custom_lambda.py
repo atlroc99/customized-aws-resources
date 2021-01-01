@@ -1,6 +1,6 @@
 from aws_cdk import core
 from aws_cdk import aws_lambda as _lambda
-
+from aws_cdk import aws_logs as _logs
 
 class CustomLambdaStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
@@ -20,7 +20,7 @@ class CustomLambdaStack(core.Stack):
 
         _code = _lambda.InlineCode(lambda_function_code)
         # create a lambda function with the method content/ body we retrieved
-        _lambda.Function(self,
+        konestone_function = _lambda.Function(self,
                          id="firstLambdaFunctionID",
                          function_name="konstone_function",
                          runtime=_lambda.Runtime.PYTHON_3_7,
@@ -30,6 +30,11 @@ class CustomLambdaStack(core.Stack):
                          reserved_concurrent_executions=1,
                          environment={
                              'LOG_LEVEL': 'INFO'
-                         }
+                         })
 
-                         )
+        #create an attach log group for the above lambda function. If this stack is delete the log group will also be deleted
+        konestone_lg = _logs.LogGroup(self,
+                                      id="konestone_lambda_log_group",
+                                      log_group_name=f"/aws/lambda/{konestone_function.function_name}",
+                                      removal_policy=core.RemovalPolicy.DESTROY)
+
