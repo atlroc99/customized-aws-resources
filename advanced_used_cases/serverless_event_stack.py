@@ -25,10 +25,9 @@ class ServerlessArchitectureStack(core.Stack):
         user_image_s3_bucket = _s3.Bucket(self,
                                           id="uploadObjectBucketID",
                                           bucket_name='user-image-upload-bkt-mz',
-                                          access_control=_s3.BucketAccessControl.PUBLIC_READ,
-                                          public_read_access=True,
+                                          access_control=_s3.BucketAccessControl.BUCKET_OWNER_READ,
+                                          # public_read_access=True,
                                           removal_policy=core.RemovalPolicy.DESTROY)
-
         # Dynamo table
         """
             This dynamodb will be storing the process image. The image will be processed by
@@ -89,3 +88,10 @@ class ServerlessArchitectureStack(core.Stack):
         s3_bkt_notification_dest = _s3_notificaitons.LambdaDestination(lambda_event_processor_function)
 
         # Assign notification for the s3 event type (ex: OBJECT_CREATED)
+        """
+       what type of event we're going to get notified for?
+       Only when an object is created / upload, Not for delete, update or modification.
+       I want to trigger my lambda function when an object is uploaded / created.
+   """
+        user_image_s3_bucket.add_event_notification(event=_s3.EventType.OBJECT_CREATED,
+                                                    dest=s3_bkt_notification_dest)
