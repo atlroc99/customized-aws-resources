@@ -25,8 +25,11 @@ class ContainerizedMicroservicesWithFargate(core.Stack):
                                                                                      task_image_options=_ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
                                                                                          image=_ecs.ContainerImage.from_registry(
                                                                                              "atlroc99/node-app")),
-                                                                                     memory_limit_mib=512,
+                                                                                     memory_limit_mib=1024,
                                                                                      public_load_balancer=True)
+
+        # health check url path
+        serverless_web_service.target_group.configure_health_check(path="/")
 
         fargate_out = core.CfnOutput(self,
                                      "fargateALBOutput",
