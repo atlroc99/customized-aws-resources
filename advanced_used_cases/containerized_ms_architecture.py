@@ -17,3 +17,20 @@ class MicroserviceWithECSServices(core.Stack):
         # define ecs cluster compute capacity
         _microservice_ecs_cluster.add_capacity("microserviceAutoScalingGroup",
                                                instance_type=_ec2.InstanceType("t2.micro"))
+
+        _albTaskImageOptions = _ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
+            image=_ecs.ContainerImage.from_registry("atlroc99/node-app"),
+            container_name="node_app_service",
+            container_port=80,
+            environment={
+                "ENVIRONMENT": "PROD"
+            })
+
+        # use ecs pattern module to deploy the micro-services containers and add load balancer
+        microservice_load_balanced = _ecs_patterns.ApplicationLoadBalancedEc2Service(self,
+                                                                                     id="microservicesALB_ID",
+                                                                                     cluster=_microservice_ecs_cluster,
+                                                                                     memory_reservation_mib=512,
+                                                                                     task_image_options=_albTaskImageOptions,)
+
+
