@@ -2,8 +2,8 @@
 
 from aws_cdk import core
 
-from customize_resources.customize_resources_stack import CustomizeResourcesStack
-
+from advanced_used_cases.containerized_ms_architecture import MicroserviceWithECSServices
 
 app = core.App()
+MicroserviceWithECSServices(app, "containerized-ms-with-ecs")
 app.synth()
