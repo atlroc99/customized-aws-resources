@@ -33,4 +33,9 @@ class MicroserviceWithECSServices(core.Stack):
                                                                                      memory_reservation_mib=512,
                                                                                      task_image_options=_albTaskImageOptions,)
 
+        output_url = core.CfnOutput(self,
+                                    id="msALB_URL_ID",
+                                    description="url for the microservice application load balancer",
+                                    value=f"{microservice_load_balanced.load_balancer.load_balancer_dns_name}")
+
 
