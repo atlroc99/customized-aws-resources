@@ -70,6 +70,13 @@ class ServerlessArchitectureStack(core.Stack):
         process_image_db_table.grant_read_write_data(lambda_event_processor_function)
 
         # Create Custom Log group & attach it to the lambda function
+        lambda_event_processor_lg = _logs.LogGroup(
+            self,
+            id="lambdaEventProcessorLogsID",
+            log_group_name=f"/aws/labmda/{lambda_event_processor_function.function_name}",
+            removal_policy=core.RemovalPolicy.DESTROY,
+            retention=_logs.RetentionDays.ONE_DAY
+        )
 
         # Create S3 Notification for Lambda Function
 
