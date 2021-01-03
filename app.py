@@ -9,5 +9,5 @@ from advanced_used_cases.serverless_event_stack import ServerlessArchitectureSta
 app = core.App()
 CustomizeResourcesStack(app, "customize-resources")
 # DeployStaticSiteStack(app, "s3-static-content")
-ServerlessArchitectureStack(app, "serverless--archi-stack")
+ServerlessArchitectureStack(app, "serverless-archi-stack")
 app.synth()
