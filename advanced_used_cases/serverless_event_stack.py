@@ -1,7 +1,16 @@
-from aws_cdk import core
-from aws_cdk import aws_s3 as _s3
-from aws_cdk import aws_logs as _logs
-from aws_cdk import aws_lambda as _lambda
+from aws_cdk import (
+    core,
+    aws_s3 as _s3,
+    aws_logs as _logs,
+    aws_lambda as _lambda,
+    aws_dynamodb as _dynamodb
+)
+
+"""
+    1. user uploads an image to s3 bucket (create an s3 for this)
+    2. image is processed by lambda function (create a py function and refer it in the lambda )
+    3. the processed image is stored in the dynamodb NoSQL DB (create a dynamoDB for this)
+"""
 
 
 class ServerlessArchitectureStack(core.Stack):
@@ -20,14 +29,25 @@ class ServerlessArchitectureStack(core.Stack):
                                           removal_policy=core.RemovalPolicy.DESTROY)
 
         # Dynamo table
+        """
+            This dynamodb will be storing the process image. The image will be processed by
+            a lambda function.
+        """
+        process_image_db = _dynamodb.Table(
+            self,
+            id="processImageDBID",
+            table_name="processImageTable",
+            partition_key=_dynamodb.Attribute(name="_id", type=_dynamodb.AttributeType.STRING),
+            removal_policy=core.RemovalPolicy.DESTROY
+        )
+
+    # Read Lambda Code
 
 
-        # Read Lambda Code
+    # Add s3 read only Managed Policy to lambda
 
-        # Add s3 read only Managed Policy to lambda
+    # Create Custom Log group
 
-        # Create Custom Log group
+    # Create S3 Notification for Lambda Function
 
-        # Create S3 Notification for Lambda Function
-
-        # Assign notification for the s3 event type (ex: OBJECT_CREATED)
+    # Assign notification for the s3 event type (ex: OBJECT_CREATED)
