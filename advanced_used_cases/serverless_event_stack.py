@@ -33,7 +33,7 @@ class ServerlessArchitectureStack(core.Stack):
             This dynamodb will be storing the process image. The image will be processed by
             a lambda function.
         """
-        process_image_db = _dynamodb.Table(
+        process_image_db_table = _dynamodb.Table(
             self,
             id="processImageDBID",
             table_name="processImageTable",
@@ -41,13 +41,36 @@ class ServerlessArchitectureStack(core.Stack):
             removal_policy=core.RemovalPolicy.DESTROY
         )
 
-    # Read Lambda Code
+        # Read Lambda Code
+        lambda_function_py_code: ''
+        try:
+            print("reading file...")
+            with open("advanced_used_cases/lambda_src/s3_event_processor.py", mode="r") as f:
+                lambda_function_py_code = f.read()
+        except OSError:
+            print("error reading the lambda src file")
 
+        inline_code = _lambda.InlineCode(lambda_function_py_code)
+        lambda_event_processor_function = _lambda.Function(self,
+                                                           "eventProcessorFnID",
+                                                           function_name="event_processor_function",
+                                                           description="function to porcess image upload it to dynamodb",
+                                                           code=inline_code,
+                                                           runtime=_lambda.Runtime.PYTHON_3_7,
+                                                           handler="index.lambda_handler",
+                                                           timeout=core.Duration.seconds(3),
+                                                           reserved_concurrent_executions=1,
+                                                           environment={
+                                                               "LOG_LEVEL": "INFO",
+                                                               "DDB_TABLE_NAME": f"{process_image_db_table.table_name}"
+                                                           })
 
-    # Add s3 read only Managed Policy to lambda
+        # Add s3 read only Managed Policy to lambda
+        # Add dynamo write privilage for lambda function
+        process_image_db_table.grant_read_write_data(lambda_event_processor_function)
 
-    # Create Custom Log group
+        # Create Custom Log group & attach it to the lambda function
 
-    # Create S3 Notification for Lambda Function
+        # Create S3 Notification for Lambda Function
 
-    # Assign notification for the s3 event type (ex: OBJECT_CREATED)
+        # Assign notification for the s3 event type (ex: OBJECT_CREATED)
