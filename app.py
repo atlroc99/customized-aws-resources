@@ -2,10 +2,8 @@
 
 from aws_cdk import core
 
-from customize_resources.customize_resources_stack import CustomizeResourcesStack
-
+from advanced_used_cases.containerized_stack_fargate import ContainerizedMicroservicesWithFargate
 
 app = core.App()
-CustomizeResourcesStack(app, "customize-resources")
-
+ContainerizedMicroservicesWithFargate(app, "cdk-with-fargate")
 app.synth()
