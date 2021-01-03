@@ -6,6 +6,4 @@ from customize_resources.customize_resources_stack import CustomizeResourcesStac
 
 
 app = core.App()
-CustomizeResourcesStack(app, "customize-resources")
-
 app.synth()
