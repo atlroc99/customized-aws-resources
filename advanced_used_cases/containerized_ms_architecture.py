@@ -1,6 +1,7 @@
 from aws_cdk import (core,
                      aws_ec2 as _ec2,
-                     aws_ecs as _ecs)
+                     aws_ecs as _ecs,
+                     aws_ecs_patterns as _ecs_patterns)
 
 
 class MicroserviceWithECSServices(core.Stack):
@@ -13,4 +14,6 @@ class MicroserviceWithECSServices(core.Stack):
         # create ecs cluster
         _microservice_ecs_cluster = _ecs.Cluster(self, id="ecsClusterID", vpc=_vpc, cluster_name="cdk_ed_cluster")
 
-        # use ecs pattern module to deploy the microserivce containers and add load balancer
+        # define ecs cluster compute capacity
+        _microservice_ecs_cluster.add_capacity("microserviceAutoScalingGroup",
+                                               instance_type=_ec2.InstanceType("t2.micro"))
