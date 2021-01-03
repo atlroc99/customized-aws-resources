@@ -9,3 +9,6 @@ class MicroserviceWithECSServices(core.Stack):
 
         # create VPC
         _vpc = _ec2.Vpc(self, id="vpcMsServiceID", max_azs=2, nat_gateways=1)
+
+        # create ecs cluster
+        _ecs_cluster = _ecs.Cluster(self, id="ecsClusterID", vpc=_vpc, cluster_name="cdk_ed_cluster")
