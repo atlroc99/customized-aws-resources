@@ -17,13 +17,18 @@ class ContainerizedMicroservicesWithFargate(core.Stack):
         _cluster = _ecs.Cluster(self, "MyCluster", vpc=_ms_vpc)
 
         # create Application load balancer Fargate Service
-        _ecs_patterns.ApplicationLoadBalancedFargateService(self,
-                                                            "myFargateService",
-                                                            cluster=_cluster,
-                                                            cpu=512,
-                                                            desired_count=4,
-                                                            task_image_options=_ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
-                                                                image=_ecs.ContainerImage.from_registry(
-                                                                    "atlroc99/node-app")),
-                                                            memory_limit_mib=512,
-                                                            public_load_balancer=True)
+        serverless_web_service = _ecs_patterns.ApplicationLoadBalancedFargateService(self,
+                                                                                     "myFargateService",
+                                                                                     cluster=_cluster,
+                                                                                     cpu=512,
+                                                                                     desired_count=4,
+                                                                                     task_image_options=_ecs_patterns.ApplicationLoadBalancedTaskImageOptions(
+                                                                                         image=_ecs.ContainerImage.from_registry(
+                                                                                             "atlroc99/node-app")),
+                                                                                     memory_limit_mib=512,
+                                                                                     public_load_balancer=True)
+
+        fargate_out = core.CfnOutput(self,
+                                     "fargateALBOutput",
+                                     description="url for fargate cluster",
+                                     value=f"{serverless_web_service.load_balancer.load_balancer_dns_name}")
