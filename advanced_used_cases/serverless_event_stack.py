@@ -3,7 +3,8 @@ from aws_cdk import (
     aws_s3 as _s3,
     aws_logs as _logs,
     aws_lambda as _lambda,
-    aws_dynamodb as _dynamodb
+    aws_dynamodb as _dynamodb,
+    aws_s3_notifications as _s3_notificaitons
 )
 
 """
@@ -79,5 +80,12 @@ class ServerlessArchitectureStack(core.Stack):
         )
 
         # Create S3 Notification for Lambda Function
+        """
+            Create S3 Notification for Lambda Function 
+            - invoke the lambda function above when an object 
+            is created / uploaded to s3 bucket
+            https://docs.aws.amazon.com/cdk/api/latest/python/aws_cdk.aws_s3_notifications.html
+        """
+        s3_bkt_notification_dest = _s3_notificaitons.LambdaDestination(lambda_event_processor_function)
 
         # Assign notification for the s3 event type (ex: OBJECT_CREATED)
