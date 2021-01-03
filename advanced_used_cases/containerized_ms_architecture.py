@@ -12,3 +12,5 @@ class MicroserviceWithECSServices(core.Stack):
 
         # create ecs cluster
         _microservice_ecs_cluster = _ecs.Cluster(self, id="ecsClusterID", vpc=_vpc, cluster_name="cdk_ed_cluster")
+
+        # use ecs pattern module to deploy the microserivce containers and add load balancer
